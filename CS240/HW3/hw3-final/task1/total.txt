@@ -1,0 +1,2 @@
+channels ../images/Lenna.png        : 5   of 5  
+channels ../images/LWSN.jpg         : 5   of 5  

@@ -1,0 +1,40 @@
+/* Task 3 */
+
+[Partition by dayOfMonth]:
+
+create table flights_partitioned_dayofmonth(Year int, Month int,
+dayOfWeek int, depTime int, CRSDepTime int, arrTime int, CRSArrTime
+int, uniqueCarrier string, flightNum int, tailNum int,
+actualElapsedTime int, CRSElapsedTime int, airTime int, arrDelay int,
+depDelay int, origin string, dest string, distance int, taxiIn int,
+taxiOut int, cancelled int, cancellationCode string, diverted int,
+carrierDelay int, weatherDelay int, NASDelay int, securityDelay int,
+lateAircraftDelay int) partitioned by (dayOfMonth int);
+
+insert into table flights_partitioned_dayofmonth partition(dayOfMonth)
+select year, month, dayofweek, deptime, crsdeptime, arrtime,
+crsarrtime, uniquecarrier, flightnum, tailnum, actualelapsedtime,
+crselapsedtime, airtime, arrdelay, depdelay, origin, dest, distance,
+taxiin, taxiout, cancelled, cancellationcode, diverted, carrierdelay,
+weatherdelay, nasdelay, securitydelay, lateaircraftdelay, dayOfMonth from
+flights;
+
+
+[Partition by month and dayOfMonth]:
+
+create table flights_partitioned_both(Year int,
+dayOfWeek int, depTime int, CRSDepTime int, arrTime int, CRSArrTime
+int, uniqueCarrier string, flightNum int, tailNum int,
+actualElapsedTime int, CRSElapsedTime int, airTime int, arrDelay int,
+depDelay int, origin string, dest string, distance int, taxiIn int,
+taxiOut int, cancelled int, cancellationCode string, diverted int,
+carrierDelay int, weatherDelay int, NASDelay int, securityDelay int,
+lateAircraftDelay int) partitioned by (month int, dayOfMonth int);
+
+insert into table flights_partitioned_both partition(month, dayOfMonth)
+select year, dayofweek, deptime, crsdeptime, arrtime,
+crsarrtime, uniquecarrier, flightnum, tailnum, actualelapsedtime,
+crselapsedtime, airtime, arrdelay, depdelay, origin, dest, distance,
+taxiin, taxiout, cancelled, cancellationcode, diverted, carrierdelay,
+weatherdelay, nasdelay, securitydelay, lateaircraftdelay, month, dayOfMonth from
+flights;

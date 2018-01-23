@@ -1,0 +1,131 @@
+/* Task 1 */
+
+[Query 1]:
+
+STAGE 1	-	Cumulative CPU:	19.97 sec
+			HDFS Read:		534149871
+			HDFS Write:		7
+			
+		Total Time Taken:	27.367 seconds
+
+
+[Query 2]:
+
+STAGE 1	-	Cumulative CPU:	20.62 sec
+			HDFS Read:		534150499
+			HDFS Write:		6
+			
+		Total Time Taken:	26.203 seconds
+
+
+[Query 3]:
+
+STAGE 1	-	Cumulative CPU:	19.6 sec
+			HDFS Read:		534151506
+			HDFS Write:		7
+			
+		Total Time Taken:	25.286 seconds
+
+
+
+ /* Task 2 */
+
+ Q: Why do we not need a reduce operator?
+ A: We do not need a reduce operator becuase we are using the SELECT(*) statement which
+ 	does not require and additional computations to select all from, therefore MapReduce
+ 	was smart enough to make this a 'map only' operation to save time and space. 
+
+[Query 1]:
+
+STAGE 1	-	Cumulative CPU:	4.2 sec
+			HDFS Read:		42258329
+			HDFS Write:		7
+			
+		Total Time Taken:	22.781 seconds
+
+
+[Query 2]:
+
+STAGE 1	-	Cumulative CPU:	5.51 sec
+			HDFS Read:		41646591
+			HDFS Write:		6
+			
+		Total Time Taken:	24.135 seconds
+
+
+[Query 3]:
+
+STAGE 1	-	Cumulative CPU:	5.23 sec
+			HDFS Read:		41646977
+			HDFS Write:		7
+			
+		Total Time Taken:	25.046 seconds
+
+Q: What do you observe for cumulative CPU time compared to our queries on the unpartitioned data?
+A: The cumulative CPU time on these partitioned table queries are significantly smaller than the ones from task 1 (unpartitioned). 
+
+Q: What do you observe for the wall clock time ("Time taken")? 
+A: The wall clock time is about the same, however task 2 was slightly smaller overall--specifically in query 1. 
+
+Q: Why do you think this is?
+A: I believe that the partitioned tables make it much faster for the CPU to process (thus resulting in the drastically smaller
+   cumulative CPU time) which overall has an effect on reducing the 'wall clock' time. By querying a table on it's partitioned attributes, the resulting CPU time (and likely 'wall clock' time) will be smaller than if it were not partitioned.  I also believe though that since the way that this is querying it still takes relatively the same overall (thus resulting in similar 'wall clock times' of ~20+ seconds) due to the nature of the cluster and MapReduce in combination with these queries. 
+
+
+
+ /* Task 3 */
+
+[Partition by dayOfMonth]:
+[Query 1]:
+
+STAGE 1	-	Cumulative CPU:	34.33 sec
+			HDFS Read:		500027342
+			HDFS Write:		7
+			
+		Total Time Taken:	26.799 seconds
+
+
+[Query 2]:
+
+STAGE 1	-	Cumulative CPU:	4.97 sec
+			HDFS Read:		16610156
+			HDFS Write:		6
+			
+		Total Time Taken:	24.159 seconds
+
+
+[Query 3]:
+
+STAGE 1	-	Cumulative CPU:	16.4 sec
+			HDFS Read:		148353109
+			HDFS Write:		7
+			
+		Total Time Taken:	27.986 seconds
+
+
+[Partition by month and dayOfMonth]:
+[Query 1]:
+
+STAGE 1	-	Cumulative CPU:	15.82 sec
+			HDFS Read:		41138673
+			HDFS Write:		7
+			
+		Total Time Taken:	24.302 seconds
+
+
+[Query 2]:
+
+STAGE 1	-	Cumulative CPU:	3.51 sec
+			HDFS Read:		1385576
+			HDFS Write:		6
+			
+		Total Time Taken:	21.954 seconds
+
+
+[Query 3]:
+
+STAGE 1	-	Cumulative CPU:	14.52 sec
+			HDFS Read:		12293596
+			HDFS Write:		7
+			
+		Total Time Taken:	23.160 seconds

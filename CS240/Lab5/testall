@@ -1,0 +1,17 @@
+#!/bin/bash
+
+{
+cd task1/test
+./testall
+cd ../../task2/test
+./testall
+} &> /dev/null
+
+cd ../..
+cat task1/total.out
+cat task2/total.out
+
+cd task1
+make clean
+cd ../task2
+make clean

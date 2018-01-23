@@ -1,0 +1,47 @@
+-- this is an example
+
+group: HW1_LIBRARY 
+
+
+BOOK = {
+	Book_id:number, Title:string, Publisher_name:string
+	1, "Book 1", "Publisher 1"
+}
+
+BOOK_AUTHORS = {
+	Book_id:number, Author_name:string
+	1, "Author 1"
+}
+
+PUBLISHER = {
+	Name:string, Address:string, Phone:string
+	"Publisher 1", "Publisher Address 1", "(111)111-1111"
+}
+
+BOOK_COPIES = {
+	Book_id:number, Branch_id:number, No_of_copies:number
+	1, 1, 1
+}
+
+BOOK_LOANS = {
+	Book_id:number, Branch_id:number, Card_no:number, Date_out:string, Due_date:string
+	1, 1, 1, "1/1/11", "1/1/11"
+	1, 2, 1, "1/1/11", "1/1/11"
+	1, 1, 2, "1/1/11", "1/1/11"
+	1, 2, 2, "1/1/11", "1/1/11"
+	1, 2, 3, "1/1/11", "1/1/11"
+}
+
+LIBRARY_BRANCH = {
+	Branch_id:number, Branch_name:string, Address:string
+	1, "Branch 1", "Branch Address 1"
+	2, "Branch 2", "Branch Address 2"
+}
+
+BORROWER = {
+	Card_no:number, Name:string, Address:string, Phone:string
+	1, "Borrower 1", "Borrower Address 1", "(111)111-1111"
+	2, "Borrower 2", "Borrower Address 2", "(222)111-1111"
+	3, "Borrower 3", "Borrower Address 3", "(333)111-1111"
+	4, "Borrower 4", "Borrower Address 4", "(444)111-1111"
+}

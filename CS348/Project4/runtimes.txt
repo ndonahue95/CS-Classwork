@@ -1,0 +1,28 @@
+ /* Task 4 */
+ 
+[Runtime of command (NOT using HIVE)]:
+
+Output:
+	22:27:43
+	462294
+	22:27:46
+
+Total runtime:	3 seconds
+
+[Metrics of HIVE query version]:
+
+Query: select COUNT(*) from flights where month = 8 and year = 1996;
+
+STAGE 1	-	Cumulative CPU:	18.92 sec
+			HDFS Read:		534150521
+			HDFS Write:		7
+			
+		Count (result):		462294
+		Total Time Taken:	26.015 seconds
+
+
+Q: How does this runtime compare with our local job?
+A: The runtime here is actually larger tha 8x the runtime of the local job! The total time taken
+   for this query in HIVE was 26.015 seconds, while the local job ran in just 5 seconds. This 
+   proves that for some operations it is best to not utilize the HIVE/cluster method and instead 
+   for simpler tasks use local jobs like this intead. 

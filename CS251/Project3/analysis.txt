@@ -1,0 +1,9 @@
+Char                    Brute                     Symbol
+------------------------------------------------------------
+ 4                less than 1 second           less than 1 second
+ 5                     8 seconds               less than 1 second
+ 6                  3 minutes 35 seconds       less than 1 second
+ 8                                                50 seconds
+10                                             3 minutes 20 seconds
+------------------------------------------------------------
+Complexity                O(2^N)                  O(2^(n/2))

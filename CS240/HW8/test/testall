@@ -1,0 +1,52 @@
+#!/bin/bash
+
+echo "test1" > test
+../main < test > test1.out
+../main.org < test > test1.org.out
+
+echo "test2" > test
+../main < test > test2.out
+../main.org < test > test2.org.out
+
+echo "test3" > test
+../main < test > test3.out
+../main.org < test > test3.org.out
+
+rm -f test
+
+diff test1.out test1.org.out > diff1.out
+diff test2.out test2.org.out > diff2.out
+diff test3.out test3.org.out > diff3.out
+
+if [ -s diff1.out ]; then
+    score1=0
+else
+    score1=10
+fi
+
+if [ -s diff2.out ]; then
+    score2=0
+else
+    score2=10
+fi
+
+if [ -s diff3.out ]; then
+    score3=0
+else
+    score3=10
+fi
+
+all=$(($score1+$score2+$score3))
+
+echo " ==================================="
+echo "  CS 240 Homework 8 (Due 10/21)"
+echo "  $USER"
+echo " ==================================="
+echo "  test1                    $score1 of 10"
+echo "  test2                    $score2 of 10"
+echo "  test3                    $score3 of 10"
+echo " ==================================="
+echo "  Total                    $all of 30"
+echo " ==================================="
+
+rm -f *.out

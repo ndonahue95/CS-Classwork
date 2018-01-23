@@ -1,0 +1,82 @@
+#!/bin/bash
+# Back to the working directory
+
+total=0
+totalmax=0
+
+rm -f total.txt *.out
+
+# Test driver
+function runtest {
+  prog=$1
+  args=$2
+  testinput=$3
+  grade=$4
+    
+  totalmax=`expr $totalmax + $grade`;
+  inputdescr=
+  if [ "$testinput" != "none" ]; then
+      inputdescr="  $testinput"
+  fi
+  descr="$args $inputdescr"
+  
+  echo "======= $descr ==========="
+  if [ "$testinput" == "test1" ] || [ "$testinput" == "test2" ]; then
+	#run tested program
+	timeout 1s ./$prog $args
+	./test_file2 $args > $prog.out
+	./$prog.org $args 
+	./test_file2 $args > $prog.org.out
+  else  
+    #Run tested program
+    timeout 1s ./$prog $args > $prog.out
+
+    #Run original program
+    ./$prog.org $args > $prog.org.out
+  fi
+  diff $prog.out $prog.org.out > diff.out
+  if [ $? -eq 0 ]; then
+      cat $prog.out
+      echo Test passed...;
+      printf "%-36s: %-3d of %-3d\n" "$descr " $grade $grade >> total.txt
+      total=`expr $total + $grade`;
+  else
+      echo "*****Test Failed*****";
+      echo ------ Your Output ----------
+      cat $prog.out
+      echo ------ Expected Output ------
+      cat $prog.org.out
+      echo ------ Difference -----------
+      cat diff.out
+      echo -----------------------------
+      printf "%-36s: %-3d of %-3d\n" "$descr " 0 $grade >> total.txt
+  fi
+  echo
+}
+
+# List of tests running
+#TODO CHANGE HOW TEST1 AND TEST2 test are ran
+runtest test_file test1 test1 10
+runtest test_file test2 test2 10
+./test_file2 test3
+runtest test_file test3 test3 10
+./test_file2 test4
+runtest test_file test4 test4 25
+./test_file2 test5
+runtest test_file test5 test5 10
+./test_file2 test6
+runtest test_file test6 test6 25
+
+
+echo > total.out
+echo >> total.out
+echo   "-------------------------------------------------" >> total.out
+echo   "CS240: Lab 12. $USER   " >> total.out
+date >> total.out
+echo   "-------------------------------------------------" >> total.out
+cat total.txt >> total.out >> total.out
+echo   "-------------------------------------------------" >> total.out
+echo   "CS240: Lab 12. $USER" `date` " Total: " $total of $totalmax >> total.out
+echo >> total.out
+cat total.out
+rm *.out *.txt *.org.out *.bin

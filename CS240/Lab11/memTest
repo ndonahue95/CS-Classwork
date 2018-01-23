@@ -1,0 +1,32 @@
+#!/bin/bash
+
+make
+
+valgrind --leak-check=full ./test_queue test7 2>&1 | grep "no leak" > leak.out
+if [ -s leak.out ]; then
+    score=1
+	echo test7 PASS
+else
+    score=0
+	echo test7 FAIL
+fi
+
+valgrind --leak-check=full ./test_queue test8 2>&1 | grep "no leak" > leak.out
+if [ -s leak.out ]; then
+    score=1
+	echo test8 PASS
+else
+    score=0
+	echo test8 FAIL
+fi
+
+valgrind --leak-check=full ./test_queue test9 2>&1 | grep "no leak" > leak.out
+if [ -s leak.out ]; then
+    score=1
+	echo test9 PASS
+else
+    score=0
+	echo test9 FAIL
+fi
+
+rm leak.out

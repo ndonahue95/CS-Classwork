@@ -1,0 +1,112 @@
+#!/bin/bash
+
+(make clean > /dev/null; make) || exit 1
+
+total=0
+totalmax=0
+
+rm -f total.txt *.out
+
+# create a temporary workspace
+
+# Output fail information
+# Only call it inside runtest, after variables are assigned
+function testfail {
+  echo "*****Test Failed*****";
+  echo $1
+  printf "%-36s: %-3d of %-3d\n" "$descr " 0 $grade >> total.txt
+  echo
+  rm .1.jpg .2.tif .3.bmp
+}
+
+# Test driver
+function runtest {
+  prog=$1
+  args=$2
+  testinput=$3
+  grade=$4
+
+  totalmax=`expr $totalmax + $grade`;
+  inputdescr=
+  if [ "$testinput" != "none" ]; then
+      inputdescr=" < $testinput"
+  fi
+  descr="$prog $args $inputdescr"
+
+  echo "======= $descr ==========="
+  
+  file="${args##*/}"
+  filename="${file%.*}"
+  
+  #Run original program
+  ./$prog.org $args > /dev/null
+  orgerrorcode=$?
+  mv ${filename}_red.jpg .1.jpg
+  mv ${filename}_green.tif .2.tif
+  mv ${filename}_blue.bmp .3.bmp
+
+  #Run tested program
+  timeout 1s ./$prog $args > /dev/null
+  errorcode=$?
+  
+  if [ $errorcode -ne $orgerrorcode ]; then
+      echo "*****Test Failed*****";
+      echo Error codes do not match
+      printf "%-36s: %-3d of %-3d\n" "$descr " 0 $grade >> total.txt
+      echo
+      return
+  else
+      if [ ! -f ${filename}_red.jpg ]; then
+        testfail "File ${filename}_red.jpg not exists!"
+		return
+      fi
+	  if [ ! -f ${filename}_green.tif ]; then
+        testfail "File ${filename}_green.tif not exists!"
+		return
+      fi
+	  if [ ! -f ${filename}_blue.bmp ]; then
+        testfail "File ${filename}_blue.bmp not exists!"
+		return
+      fi
+  fi
+
+  ../compare ${filename}_red.jpg .1.jpg
+  if [ $? -ne 0 ]; then
+      testfail "Incorrect file ${filename}_red.jpg!"
+	  return
+  fi
+  ../compare ${filename}_green.tif .2.tif
+  if [ $? -ne 0 ]; then
+      testfail "Incorrect file ${filename}_green.tif!"
+	  return
+  fi
+  ../compare ${filename}_blue.bmp .3.bmp
+  if [ $? -ne 0 ]; then
+      testfail "Incorrect file ${filename}_blue.bmp!"
+	  return
+  fi
+  
+  echo Test passed...;
+  printf "%-36s: %-3d of %-3d\n" "$descr " $grade $grade >> total.txt
+  total=`expr $total + $grade`;
+  echo
+  
+  rm .1.jpg .2.tif .3.bmp
+}
+
+# List of tests running
+runtest channels "../images/Lenna.png" none 5
+runtest channels "../images/LWSN.jpg" none 5
+
+echo > total.out
+echo >> total.out
+echo   "-------------------------------------------------" >> total.out
+echo   "CS240: HW 3. $USER   " >> total.out
+date >> total.out
+echo   "-------------------------------------------------" >> total.out
+cat total.txt >> total.out >> total.out
+echo   "-------------------------------------------------" >> total.out
+echo   "CS240: HW 3. $USER" `date` " Total: " $total of $totalmax >> total.out
+echo >> total.out
+
+cat total.out

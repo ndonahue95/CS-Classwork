@@ -1,0 +1,99 @@
+#!/bin/bash
+# Back to the working directory
+
+total=0
+totalmax=0
+
+rm -f total.txt *.out
+
+# Test driver
+function runtest {
+  prog=$1
+  args=$2
+  testinput=$3
+  grade=$4
+ 
+  totalmax=`expr $totalmax + $grade`;
+  inputdescr=
+  if [ "$testinput" != "none" ]; then
+      inputdescr="  $testinput"
+  fi
+  descr="$args $inputdescr"
+  
+  echo "======= $descr ==========="
+
+  #Run tested program
+  timeout 1s ./$prog $args > $prog.out
+  errorcode=$?
+  #echo $errorcode
+  #if [ $? -ne 0 ]; then
+  #   echo Cannot run ./$prog
+  #   cat $prog.out
+  #   echo "*****Test Failed*****";
+  #   return
+  #fi
+
+  #Run original program
+  ./$prog.org $args > $prog.org.out
+  orgerrorcode=$?
+  #echo $orgechocode
+  #if [ $? -ne 0 ]; then
+  #   echo Cannot run ./$prog.org
+  #   cat $prog.org.out
+  #   echo "*****Test Failed*****";
+  #   return
+  #fi
+  
+ # if [ $errorcode -ne $orgerrorcode ]; then
+ #    echo Error codes do not match
+ #     echo "*****Test Failed*****";
+ #     return
+ # fi
+
+  diff $prog.out $prog.org.out > diff.out
+  if [ $? -eq 0 ]; then
+      cat $prog.out
+      echo Test passed...;
+      printf "%-36s: %-3d of %-3d\n" "$descr " $grade $grade >> total.txt
+      total=`expr $total + $grade`;
+  else
+      echo "*****Test Failed*****";
+      echo ------ Your Output ----------
+      cat $prog.out
+      echo ------ Expected Output ------
+      cat $prog.org.out
+      echo ------ Difference -----------
+      cat diff.out
+      echo -----------------------------
+      printf "%-36s: %-3d of %-3d\n" "$descr " 0 $grade >> total.txt
+  fi
+  echo
+}
+
+# List of tests running
+runtest test_queue test1 Initialization 10
+runtest test_queue test2 Setters 10
+runtest test_queue test3 Getters 10
+runtest test_queue test4 Enqueue 25
+runtest test_queue test5 Queue_Peek 10
+runtest test_queue test6 Dequeue 25
+runtest test_queue test7 DeleteNode 5
+runtest test_queue test8 DeleteQueue 5
+#runtest test_queue test9 Stress_Test 10
+
+echo > total.out
+echo >> total.out
+echo   "-------------------------------------------------" >> total.out
+echo   "CS240: Lab 11. $USER   " >> total.out
+date >> total.out
+echo   "-------------------------------------------------" >> total.out
+cat total.txt >> total.out >> total.out
+echo   "-------------------------------------------------" >> total.out
+echo   "CS240: Lab 11. $USER" `date` " Total: " $total of $totalmax >> total.out
+echo >> total.out
+
+cat total.out
+
+echo MEMTEST
+
+./memTest

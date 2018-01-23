@@ -1,0 +1,2 @@
+negate ../images/Lenna.png          : 5   of 5  
+negate ../images/LWSN.jpg           : 5   of 5  
